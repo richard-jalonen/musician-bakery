@@ -9,14 +9,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/payment")
 public class PaymentController {
     @Autowired
     PaymentService paymentService;
 
-    @GetMapping("/checkout-amount")
-    public BigDecimal getCheckoutAmount(@RequestBody Order order) {
+    @PostMapping("/checkout-amount")
+    public BigDecimal postOrder(@RequestBody Order order) {
+        System.out.println(order);
         return paymentService.getCheckoutAmount(order);
     }
 
