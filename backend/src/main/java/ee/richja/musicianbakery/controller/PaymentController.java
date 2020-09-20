@@ -18,7 +18,6 @@ public class PaymentController {
 
     @PostMapping("/checkout-amount")
     public BigDecimal postOrder(@RequestBody Order order) {
-        System.out.println(order);
         return paymentService.getCheckoutAmount(order);
     }
 
