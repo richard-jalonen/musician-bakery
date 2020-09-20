@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mt-3">
     <form @submit="submitOrder" method="post">
       <input
         class="input is-rounded"
@@ -11,6 +11,12 @@
       />
       <input type="submit" value="Submit" style="display: none" />
     </form>
+    <div
+      v-if="this.storeOrderError"
+      class="notification is-danger is-light mt-3"
+    >
+      {{ this.storeOrderError }}
+    </div>
   </div>
 </template>
 
@@ -21,8 +27,6 @@ export default {
   data() {
     return {
       orderString: undefined,
-      order: undefined,
-      orderError: false,
     }
   },
   computed: {
@@ -36,6 +40,7 @@ export default {
       e.preventDefault()
       await this.$store.dispatch('fetchOrder', this.orderString)
       await this.$store.dispatch('fetchOrderSum', this.orderString)
+      this.orderString = undefined
     },
   },
 }

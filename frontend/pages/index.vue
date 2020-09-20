@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container has-background-white-bis column is-half">
     <order />
     <payment />
   </div>
@@ -9,4 +9,8 @@
 export default {}
 </script>
 
-<style></style>
+<style>
+.container {
+  max-width: 800px;
+}
+</style>

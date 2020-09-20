@@ -2,8 +2,8 @@ export const state = () => ({
   order: undefined,
   orderSum: undefined,
   change: undefined,
-  orderError: false,
-  paymentError: false,
+  orderError: undefined,
+  paymentError: undefined,
 })
 
 export const mutations = {
@@ -26,7 +26,7 @@ export const mutations = {
 
 export const actions = {
   async fetchOrder({ commit }, orderString) {
-    commit('setOrderError', false)
+    commit('setOrderError', undefined)
     const orderData = await this.$axios
       .get('http://localhost:8080/order/' + orderString)
       .then((response) => {
@@ -34,13 +34,14 @@ export const actions = {
       })
       .catch((err) => {
         if (err.response) {
-          console.log(err)
-          commit('setOrderError', true)
+          if (err.response.data) commit('setOrderError', err.response.data)
+          else commit('setOrderError', err)
         }
       })
     commit('setOrder', orderData)
   },
   async fetchOrderSum({ commit, state }) {
+    if (!state.order) return
     const sumData = await this.$axios
       .post('http://localhost:8080/payment/checkout-amount', state.order)
       .then((response) => {
@@ -48,13 +49,14 @@ export const actions = {
       })
       .catch((err) => {
         if (err.response) {
-          console.log(err)
+          if (err.response.data) commit('setOrderError', err.response.data)
+          else commit('setOrderError', err)
         }
       })
     commit('setOrderSum', sumData)
   },
   async postOrderPayment({ commit, state }, payload) {
-    commit('setPaymentError', false)
+    commit('setPaymentError', undefined)
     const paymentSum = await this.$axios
       .post(
         'http://localhost:8080/payment/pay?checkoutAmount=' +
@@ -68,8 +70,9 @@ export const actions = {
       })
       .catch((err) => {
         if (err.response) {
-          console.log(err)
-          commit('setPaymentError', true)
+          if (err.response.status == 409)
+            commit('setPaymentError', err.response.data)
+          else commit('setPaymentError', err)
         }
       })
     commit('setPayment', paymentSum)
