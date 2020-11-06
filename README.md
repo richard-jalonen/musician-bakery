@@ -2,7 +2,7 @@
 
 # ABOUT
 
-Full stack technical assignment for a developer position.
+Full stack technical assignment for a developer position at Eesti Energia.
 
 # RUNNING IN LOCALHOST
 
